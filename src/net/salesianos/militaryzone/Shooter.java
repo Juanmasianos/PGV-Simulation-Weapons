@@ -31,9 +31,9 @@ public class Shooter extends Thread {
 
                     System.out.println(name + " esta probando el arma " + shootingRange.getStoredWeapons().get(0));
 
-                    shootingRange.consumeWeapon();
-
                     Thread.sleep(consumeTime * 1000);
+                    
+                    shootingRange.consumeWeapon();
                     
                     System.out.println(name + " ha terminado de probar el arma " + shootingRange.getStoredWeapons().get(0));
 

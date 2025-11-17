@@ -1,5 +1,6 @@
 package net.salesianos.militaryzone;
 
+import java.util.Random;
 
 public class WeaponsFactory extends Thread{
     
@@ -20,8 +21,33 @@ public class WeaponsFactory extends Thread{
 
     @Override
     public void run() {
+
+        Random random = new Random();
+
         for (int i = 0; i < maxWeapons; i++) {
-            
+            try {
+                if (this.shootingRange.getStoredWeapons().size() > 0) {
+
+                    int fabricationTime = random.nextInt(maxFabricationTime);
+
+                    String newWeapon = weapon[random.nextInt(10)];
+
+                    System.out.println("La fabrica " + this.id + " esta fabricando el arma " + newWeapon);
+
+                    Thread.sleep(fabricationTime * 1000);
+                    
+                    shootingRange.consumeWeapon();
+                    
+                    System.out.println("La fabrica " + this.id + " ha terminado de fabricar el arma " + newWeapon);
+
+                } else {
+                    
+                    this.wait();
+
+                }
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
         }
     }
 
