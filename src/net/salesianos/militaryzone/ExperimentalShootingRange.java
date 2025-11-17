@@ -4,21 +4,38 @@ import java.util.ArrayList;
 
 public class ExperimentalShootingRange {
     
-    private ArrayList<String> storedWeapons = new ArrayList<>(10);
+    private ArrayList<String> storedWeapons = new ArrayList<>();
+    private int maximumStorage; 
 
-    public ExperimentalShootingRange() {
+    public ExperimentalShootingRange(int maximumStorage) {
+        this.maximumStorage = maximumStorage;
     }
 
-    public void addWeapon(String weapon) {
+    public synchronized void addWeapon(String weapon) {
 
-        this.storedWeapons.add(weapon);
+        if (storedWeapons.size() < maximumStorage) {
+
+            this.storedWeapons.add(weapon);
+
+            this.notify();
+
+        }
 
     }
 
-    public void consumeWeapon() {
+    public synchronized void consumeWeapon() {
 
-        this.storedWeapons.remove(0);
+        if (storedWeapons.size() != 0) {
 
+            this.storedWeapons.remove(0);
+            
+            this.notify();
+
+        }
+    }
+
+    public ArrayList<String> getStoredWeapons() {
+        return storedWeapons;
     }
 
 }
