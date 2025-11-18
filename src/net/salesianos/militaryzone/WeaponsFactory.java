@@ -2,15 +2,17 @@ package net.salesianos.militaryzone;
 
 import java.util.Random;
 
-public class WeaponsFactory extends Thread{
-    
+public class WeaponsFactory extends Thread {
+
     private String id;
     private int maxWeapons;
-    private String[] weapon = {"laser spartan", "artefacto futurista 009", "trumna prime", "chola de mamá", "gomu gomu no mi", "Terrablade", "Espada de netherita", "pistola nerf", "Excalibur", "Sekki"};
+    private String[] weapon = { "laser spartan", "artefacto futurista 009", "trumna prime", "chola de mamá",
+            "gomu gomu no mi", "Terrablade", "Espada de netherita", "pistola nerf", "Excalibur", "Sekki" };
     private int maxFabricationTime;
     private ExperimentalShootingRange shootingRange;
 
-    public WeaponsFactory (String id, int maxWeapons, int maxFabricationTime, ExperimentalShootingRange experimentalShootingRange) {
+    public WeaponsFactory(String id, int maxWeapons, int maxFabricationTime,
+            ExperimentalShootingRange experimentalShootingRange) {
 
         this.id = id;
         this.maxWeapons = maxWeapons;
@@ -26,8 +28,7 @@ public class WeaponsFactory extends Thread{
 
         for (int i = 0; i < maxWeapons; i++) {
             try {
-                if (this.shootingRange.getStoredWeapons().size() > 0) {
-
+                synchronized (this.shootingRange) {
                     int fabricationTime = random.nextInt(maxFabricationTime);
 
                     String newWeapon = weapon[random.nextInt(10)];
@@ -35,16 +36,12 @@ public class WeaponsFactory extends Thread{
                     System.out.println("La fabrica " + this.id + " esta fabricando el arma " + newWeapon);
 
                     Thread.sleep(fabricationTime * 1000);
-                    
-                    shootingRange.consumeWeapon();
-                    
+
+                    shootingRange.addWeapon(newWeapon);
+
                     System.out.println("La fabrica " + this.id + " ha terminado de fabricar el arma " + newWeapon);
-
-                } else {
-                    
-                    this.wait();
-
                 }
+
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }

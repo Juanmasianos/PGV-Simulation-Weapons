@@ -19,29 +19,24 @@ public class Shooter extends Thread {
 
     @Override
     public void run() {
-        
+
         Random random = new Random();
 
         for (int i = 0; i < numberOfTests; i++) {
 
             try {
-                if (this.shootingRange.getStoredWeapons().size() > 0) {
-
+                synchronized (this.shootingRange) {
                     int consumeTime = random.nextInt(maxConsumeTime);
+                    
+                    String weapon = shootingRange.consumeWeapon();
 
-                    System.out.println(name + " esta probando el arma " + shootingRange.getStoredWeapons().get(0));
+                    System.out.println(this.name + " esta probando el arma " + weapon);
 
                     Thread.sleep(consumeTime * 1000);
-                    
-                    shootingRange.consumeWeapon();
-                    
-                    System.out.println(name + " ha terminado de probar el arma " + shootingRange.getStoredWeapons().get(0));
 
-                } else {
-                    
-                    this.wait();
-
+                    System.out.println(this.name + " ha terminado de probar el arma " + weapon);
                 }
+
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
